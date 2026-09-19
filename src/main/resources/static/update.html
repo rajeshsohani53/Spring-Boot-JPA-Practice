@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Update student</title>
+</head>
+<script type="text/javascript">
+
+async function loadStudent() {
+
+    // Get id from URL
+    const params = new URLSearchParams(window.location.search);
+
+    const studentId = params.get("id");
+
+    // Get student from Spring Boot
+    const response = await fetch("/students/" + studentId);
+
+    const student = await response.json();
+
+    // Put data into input fields
+    document.getElementById("name").value = student.name;
+    document.getElementById("course").value = student.course;
+}
+
+async function updateStudent()
+{
+	const params = new URLSearchParams(window.location.search);
+	const studentId = params.get("id");
+	const student = { 
+			name: document.getElementById("name").value,
+			course: document.getElementById("course").value
+			};
+	const response = await fetch(`/students/${studentId}`,
+			{ 
+		method: "PUT", headers: { "Content-Type": "application/json" },
+		body: JSON.stringify(student) });
+	if (response.ok) {
+		alert("Student updated successfully"); 
+	// Go back to student list 
+	window.location.href = "list.html"; 
+	}
+	else { 
+		alert("Failed to update student");
+		}
+}
+
+
+</script>
+
+<body onload="loadStudent()">
+ Enter the student name : <input type="text" id="name"></br>
+  Enter the Student course : <input type="text" id="course"></br>
+  <button onclick="updateStudent()"> Update Student </button>
+  
+  
+</body>
+</html>

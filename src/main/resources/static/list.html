@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>List of Students</title>
+</head>
+
+<script>
+window.onload =loadStudents;
+async function loadStudents()
+{
+	const response=await fetch("/students");
+	const students=await response.json();
+	const table=document.getElementById("studentTableBody");
+	
+	table.innerHTML="";
+	students.forEach(student=>{
+		table.innerHTML+=`
+			<tr>
+            <td>${student.id}</td>
+            <td>${student.name}</td>
+            <td>${student.course}</td>
+            <td><a href="update.html?id=${student.id}">Update</a></td>
+            <button onclick="deleteStudent(${student.id})">
+            Delete
+        </button>
+        </tr>
+		`
+		
+		
+		
+     
+		
+	});
+}
+async function deleteStudent(studentId) {
+
+    const response = await fetch("/students/" + studentId, {
+        method: "DELETE"
+    });
+
+    if (response.ok) {
+        alert("Student deleted successfully");
+
+        // Reload student list
+        loadStudents();
+    } else {
+        alert("Failed to delete student");
+    }
+}
+
+</script>
+<body>
+Hii Rajesh i'm spring boot
+
+<table border="">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Course</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody id="studentTableBody">
+    </tbody>
+</table>
+
+</body>
+</html>
